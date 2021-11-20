@@ -3,6 +3,11 @@ import styled from "styled-components";
 
 const PaddingRow = styled.div `
   padding: 8px;
+  width: 100%;
+
+  .ant-space, .ant-space-item {
+    width: 100%;
+  }
 `
 
 const Row = ({children}) =>{

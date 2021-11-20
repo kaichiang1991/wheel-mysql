@@ -2,6 +2,7 @@ import 'antd/dist/antd.css'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import AddItem from './components/AddItem'
+import ItemList from './components/ItemList'
 import DefaultLayout from './components/layouts/DefaultLayout'
 import TitleSelector from './components/TitleSelector'
 
@@ -19,6 +20,7 @@ const App = () => {
     <DefaultLayout>
       <TitleSelector arr={selectArr} reloadState={[toReload, setToReload]} />
       <AddItem />
+      <ItemList />
     </DefaultLayout>
   )
 }

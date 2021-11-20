@@ -1,18 +1,24 @@
 import { Form, Input, Button, InputNumber } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useRecoilState } from 'recoil';
-import { prizeList } from '../recoil';
+import { prizeLists } from '../recoil';
 import Row from './common/Row'
 
 const AddItem = () => {
       
   const [form] = useForm()
-  const [list, setList] = useRecoilState(prizeList)
+  const [lists, setLists] = useRecoilState(prizeLists)
   const onFinish = ({name, count}) =>{
     if(!name || !count)
       return
 
-    setList([...list, {name, count}])
+    if(lists.find(list => list.name === name)){
+      alert('duplicate')      // ToDo 重複的錯誤提示
+
+      return
+    }
+    
+    setLists([...lists, {name, count}])
   }
 
   return (

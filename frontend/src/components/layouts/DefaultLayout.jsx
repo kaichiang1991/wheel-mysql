@@ -7,6 +7,10 @@ const headerStyle = {
   color: '#fff'
 }
 
+const mainStyle = {
+  height: '100%'
+}
+
 const DefaultLayout = ({children}) => {
   return (
     <RecoilRoot>
@@ -14,7 +18,7 @@ const DefaultLayout = ({children}) => {
         <Header style={headerStyle}>
           抽獎程式
         </Header>
-        <Content>
+        <Content style={mainStyle}>
           {children}
         </Content>
       </Layout>

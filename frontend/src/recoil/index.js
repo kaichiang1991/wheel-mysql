@@ -1,6 +1,14 @@
-import { atom } from 'recoil'
+import { atom, selector } from 'recoil'
 
-export const prizeList = atom({
+export const prizeLists = atom({
   key: 'prizeList',
   default: []
+})
+
+export const prizeListInFormData = selector({
+  key: 'prizeListInFormData',
+  get: ({get}) =>{
+    const lists = get(prizeLists)
+    return lists.map((list, index) => ({...list, key: index}))
+  }
 })
