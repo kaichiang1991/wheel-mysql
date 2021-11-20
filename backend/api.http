@@ -1,0 +1,28 @@
+### Get List
+GET http://localhost:5000/api/list
+
+### POST List
+POST http://localhost:5000/api/list
+Content-Type: application/json
+
+{
+  "title": "出門購物"
+}
+
+### DELETE List
+DELETE http://localhost:5000/api/list/list2
+
+###
+GET http://localhost:5000/api
+
+### Get One
+GET http://localhost:5000/api/post2
+
+### POST
+POST http://localhost:5000/api
+Content-Type: application/json
+
+{
+  "name": "post2",
+  "count": 5
+}
