@@ -12,3 +12,8 @@ export const prizeListInFormData = selector({
     return lists.map((list, index) => ({...list, key: index}))
   }
 })
+
+export const currentListState = atom({
+  key: 'currentList',
+  default: ''
+})

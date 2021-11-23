@@ -1,24 +1,21 @@
 import { Space, Divider } from "antd";
+import React from "react";
 import styled from "styled-components";
 
-const PaddingRow = styled.div `
+const PaddingRow = styled(Space) `
   padding: 8px;
   width: 100%;
-
-  .ant-space, .ant-space-item {
-    width: 100%;
-  }
 `
 
-const Row = ({children}) =>{
+const CustomRow = ({children}) =>{
   return (
+    <div>
     <PaddingRow>
-      <Space>
-        {children}
-      </Space>
-      <Divider style={{margin: 12}}/>
+      {children}
     </PaddingRow>
+    <Divider style={{margin: 12}}/>
+    </div>
   )
 }
 
-export default Row
+export default CustomRow

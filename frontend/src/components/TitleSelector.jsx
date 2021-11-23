@@ -1,11 +1,17 @@
 import { Select, Divider, Input, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import Row from '../components/common/Row'
+import CustomRow from '../components/common/Row'
 import styled from 'styled-components'
 import { useState } from 'react';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { currentListState } from '../recoil';
 
 const { Option } = Select;
+
+const StyledSelect = styled(Select)`
+  width: 80%;
+`
 
 const StyledInputContainer = styled.div `
   display: flex;
@@ -19,34 +25,38 @@ const StyledInputContainer = styled.div `
 
 const TitleSelector = ({arr, reloadState}) => {
 
-  const [item, setItem] = useState('')
+  const [title, setTitle] = useState('')
+  const [currList, setCurrList] = useRecoilState(currentListState)
   
   const handleNameChange = ({target: {value}}) => {
-    setItem(value)
+    // setTitle(value)
+    setCurrList(value)
   }
 
   const addItem = async () => {
-    await axios.post('/api/list', {title: item})
+    if(arr.find(obj => obj.title === currList)){
+      alert('名稱重複')
+      return
+    }
+
+    await axios.post('/api/list', {title: currList})
     const [toReload, setToReload] = reloadState
     setToReload(!toReload)
   }
 
   return (
-    <Row>
-      <span>抽獎名稱</span>
-      <Select onSelect={()=> console.log('select')} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
-        <div>
-          {menu}
-          <Divider style={{margin: '4px 0'}}/>
-          <StyledInputContainer>
-            <Input onChange={handleNameChange} value={item}/>
-            <PlusOutlined onClick={addItem}/>
-          </StyledInputContainer>
-        </div>
-      )}>
-        {arr.map(({id, title}) => <Option key={id}>{title}</Option> )}
-      </Select>
-    </Row>
+    <StyledSelect onSelect={(e)=> setCurrList(arr.find(obj => obj.id == e + '').title)} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
+      <div>
+        {menu}
+        <Divider style={{margin: '4px 0'}}/>
+        <StyledInputContainer>
+          <Input onChange={handleNameChange} value={currList}/>
+          <PlusOutlined onClick={addItem}/>
+        </StyledInputContainer>
+      </div>
+    )}>
+    {arr.map(({id, title}) => <Option key={id}>{title}</Option> )}
+    </StyledSelect>
   )
 }
 

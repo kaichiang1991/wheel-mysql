@@ -1,4 +1,4 @@
-import Row from '../components/common/Row'
+import CustomRow from '../components/common/Row'
 import {Table, Tag, Space} from 'antd'
 import ItemButton from './ItemButton'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -30,9 +30,9 @@ const ItemList = () => {
   ]
 
   return (
-    <Row>
+    <CustomRow>
       <Table style={{width: '100%'}} columns={columns} dataSource={lists} pagination={false} />
-    </Row>
+    </CustomRow>
   )
 }
 

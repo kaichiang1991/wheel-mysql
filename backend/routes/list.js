@@ -9,7 +9,7 @@ const sequelize = new Sequelize('WheelDB', 'root', 'abcd1234', {
 class List extends Model{}
 List.init({
   title: {type: DataTypes.STRING, unique: true}
-}, {sequelize})
+}, {sequelize, tableName: 'List'})
 List.sync()
 
 // 取得所有 List

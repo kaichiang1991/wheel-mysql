@@ -2,7 +2,7 @@ import { Form, Input, Button, InputNumber } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useRecoilState } from 'recoil';
 import { prizeLists } from '../recoil';
-import Row from './common/Row'
+import CustomRow from './common/Row'
 
 const AddItem = () => {
       
@@ -22,7 +22,7 @@ const AddItem = () => {
   }
 
   return (
-    <Row>
+    <CustomRow>
       <Form 
         style={{alignItems: 'flex-end', justifyContent: 'space-between'}}
         form={form}
@@ -40,7 +40,7 @@ const AddItem = () => {
           <Button type="primary" htmlType="submit">送出</Button>
         </Form.Item>
       </Form>
-    </Row>
+    </CustomRow>
   )
 }
 

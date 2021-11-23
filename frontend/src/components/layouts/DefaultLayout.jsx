@@ -1,28 +1,22 @@
 
-import { Layout } from 'antd'
+import { Layout, Row, Col} from 'antd'
 import { RecoilRoot } from 'recoil'
+import styled from 'styled-components'
+import AppHeader from './AppHeader'
 const {Header, Content} = Layout
-
-const headerStyle = {
-  color: '#fff'
-}
 
 const mainStyle = {
   height: '100%'
 }
 
-const DefaultLayout = ({children}) => {
+const DefaultLayout = ({title, children}) => {
   return (
-    <RecoilRoot>
-      <Layout >
-        <Header style={headerStyle}>
-          抽獎程式
-        </Header>
-        <Content style={mainStyle}>
-          {children}
-        </Content>
-      </Layout>
-    </RecoilRoot>
+    <Layout >
+      <AppHeader />
+      <Content style={mainStyle}>
+        {children}
+      </Content>
+    </Layout>
   )
 }
 
