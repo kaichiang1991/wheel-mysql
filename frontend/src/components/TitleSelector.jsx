@@ -1,11 +1,11 @@
 import { Select, Divider, Input, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import CustomRow from '../components/common/Row'
 import styled from 'styled-components'
 import { useState } from 'react';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { currentListState } from '../recoil';
+import { useLocation } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -25,11 +25,9 @@ const StyledInputContainer = styled.div `
 
 const TitleSelector = ({arr, reloadState}) => {
 
-  const [title, setTitle] = useState('')
   const [currList, setCurrList] = useRecoilState(currentListState)
   
   const handleNameChange = ({target: {value}}) => {
-    // setTitle(value)
     setCurrList(value)
   }
 
@@ -44,8 +42,9 @@ const TitleSelector = ({arr, reloadState}) => {
     setToReload(!toReload)
   }
 
+  const {pathname} = useLocation()
   return (
-    <StyledSelect onSelect={(e)=> setCurrList(arr.find(obj => obj.id == e + '').title)} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
+    <StyledSelect disabled={pathname === '/game'} onSelect={(e)=> setCurrList(arr.find(obj => obj.id == e + '').title)} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
       <div>
         {menu}
         <Divider style={{margin: '4px 0'}}/>
