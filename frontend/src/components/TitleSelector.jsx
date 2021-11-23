@@ -1,7 +1,6 @@
-import { Select, Divider, Input, Space } from 'antd';
+import { Select, Divider, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components'
-import { useState } from 'react';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { currentListState } from '../recoil';

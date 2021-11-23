@@ -1,7 +1,5 @@
 
-import { Layout, Row, Col} from 'antd'
-import { RecoilRoot } from 'recoil'
-import styled from 'styled-components'
+import { Layout} from 'antd'
 import AppHeader from './AppHeader'
 const {Header, Content} = Layout
 

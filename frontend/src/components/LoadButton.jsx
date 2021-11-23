@@ -1,6 +1,6 @@
 import {Row, Col, Divider, Button, Upload, message} from 'antd'
 import { UploadOutlined } from "@ant-design/icons"
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { currentListState, prizeLists } from '../recoil'
 import axios from 'axios'
 // import XLSX from 'xlsx'
@@ -19,14 +19,13 @@ const LoadButton = () => {
   }
 
   const currentList = useRecoilValue(currentListState)
-  const [lists, setLists] = useRecoilState(prizeLists)
+  const setLists = useSetRecoilState(prizeLists)
 
   const handleLoadClick = async () => {
     console.log('click', currentList)
     if(!currentList)
       return
     const r = await axios.get(`/api/prize/${currentList}`)
-    console.log(r.data)
     setLists(r.data)
   }
 

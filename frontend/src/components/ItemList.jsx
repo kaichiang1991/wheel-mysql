@@ -1,8 +1,8 @@
 import CustomRow from '../components/common/Row'
-import {Table, Tag, Space} from 'antd'
+import { Table } from 'antd'
 import ItemButton from './ItemButton'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { prizeLists, prizeListInFormData } from '../recoil'
+import { useRecoilValue } from 'recoil'
+import { prizeListInFormData } from '../recoil'
 
 const ItemList = () => {
 
