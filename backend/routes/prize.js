@@ -36,21 +36,30 @@ router.get('/:name', async (req, res) =>{
   res.json(findPrize)
 })
 
+/**
+ * 新增一個品項
+ * body{
+ *    name: 獎項名稱
+ *    count: 剩餘數量
+ *    origCount: 原始數量
+ *    list_name: 對應抽獎名稱
+ * }
+ */
 router.post('/', async (req, res) =>{
   const {name, count, origCount, list_name} = req.body
 
-  const findOne = await Prize.findOne({where: {list_name, name}}).catch(err => console.log('not find'))
-  if(findOne){
-    res.json({code: -2, err: '已經存在'})
-    return
+  const [prize, isCreated] = await Prize.findOrCreate({where: {list_name, name}})
+  let result = {code: 0}
+  if(isCreated){
+    console.dir('新增')
+    await prize.update({count, origCount})
+    result = {...result, prize}
+  }else{
+    console.dir('已存在')
+    result = {...result, code: -1, data: '已存在'}
   }
 
-  const prize = await Prize.create({name, count, origCount, list_name}).catch(err => {
-    res.json({code: -1, err})
-  })
-
-  if(!prize)  return
-  res.json({code: 0, newPrize: prize})
+  res.json(result)
 })
 
 /**
@@ -74,11 +83,31 @@ router.patch('/:name', async (req, res) =>{
     console.dir('新增')
   }else{
     await prize.update({count, origCount})
-    result = {...result, prize: prize.toJSON()}
+    result = {...result, prize}
     console.dir('更新')
   }
 
   res.json(result)
+})
+
+/**
+ * 刪除某個列表的全部 item
+ */
+router.delete('/all/:list_name', async (req, res) =>{
+  const {list_name} = req.params
+  const count = await Prize.destroy({where: {list_name}})
+  res.json({code: 0, count})
+})
+
+
+/**
+ * 刪除指定的獎項
+ * /api/prize/{獎項名稱}/{列表名稱}
+ */
+router.delete('/:name/:list_name', async (req, res) =>{
+  const {name, list_name} = req.params
+  const count = await Prize.destroy({where: {list_name, name}})
+  res.json({code: 0, count})
 })
 
 module.exports = router

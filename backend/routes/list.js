@@ -34,6 +34,7 @@ router.post('/', async (req, res) =>{
 router.delete('/:title', async (req, res) =>{
   const {title} = req.params
   await List.destroy({where: {title}})
+  // ToDo 刪除 prize 裡面符合的獎項
   res.json({code: 0})
 })
 
