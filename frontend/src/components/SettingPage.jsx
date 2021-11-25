@@ -19,7 +19,7 @@ const SettingPage = () => {
       return
     
     history.push('/game')
-  }, [lists, toNext])
+  }, [lists, toNext, history])
 
 
   const handleClick = async () => {

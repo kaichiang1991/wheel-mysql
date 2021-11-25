@@ -29,6 +29,7 @@ const Wheel = ({lists}) => {
       text.anchor.set(.5)
           
       currentDeg = nextDegree
+      return null
     })
     g.endFill()
   }, [lists])

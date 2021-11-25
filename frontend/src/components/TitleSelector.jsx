@@ -22,7 +22,7 @@ const StyledInputContainer = styled.div `
   }
 `
 
-const TitleSelector = ({arr, reloadState}) => {
+const TitleSelector = ({arr, toReload, setToReload}) => {
 
   const [currList, setCurrList] = useRecoilState(currentListState)
   
@@ -37,7 +37,6 @@ const TitleSelector = ({arr, reloadState}) => {
     }
 
     await axios.post('/api/list', {title: currList})
-    const [toReload, setToReload] = reloadState
     setToReload(!toReload)
   }
 

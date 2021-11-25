@@ -1,4 +1,4 @@
-import { Container, Graphics, PixiComponent, Stage, useApp } from '@inlet/react-pixi'
+import { Container, Graphics, Stage } from '@inlet/react-pixi'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { prizeLists, toPlayWheel } from '../../recoil'
@@ -29,7 +29,7 @@ const AppGame = ({parentWidth}) => {
   const [toPlay, setToPlay] = useRecoilState(toPlayWheel)
 
   // 遊戲開關
-  useEffect(async ()=>{
+  useEffect(()=>{
     if(!toPlay)
       return
 
@@ -40,7 +40,7 @@ const AppGame = ({parentWidth}) => {
       setToPlay(false)
     }, 3000)
     
-  }, [toPlay])
+  }, [toPlay, setToPlay])
 
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{

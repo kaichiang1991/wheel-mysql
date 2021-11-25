@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import GameList from './GameList'
 import AppGame from './pixi/AppGame'
 import { PlayCircleFilled } from "@ant-design/icons"
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { toPlayWheel } from '../recoil'
 
 const GamePage = () => {

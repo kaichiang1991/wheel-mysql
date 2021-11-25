@@ -23,13 +23,15 @@ const StyledHeader = styled(Layout.Header)`
 
 const AppHeader = () => {
   const [selectArr, setSelectArr] = useState([])
-  const reloadState = useState(true)
+  const [toReload, setToReload] = useState(true)
   
   // 重新取得所有 list
-  useEffect(async ()=>{
-    const r = await axios.get('/api/list')
-    setSelectArr(r.data)
-  }, [reloadState[0]])
+  useEffect(()=>{
+    (async ()=>{
+      const r = await axios.get('/api/list')
+      setSelectArr(r.data)
+    })()
+  }, [toReload])
 
   const history = useHistory()
   const handleClick = () => {
@@ -40,7 +42,7 @@ const AppHeader = () => {
     <StyledHeader>
       <Row>
         <Col span={12}><span onClick={handleClick}>抽獎名稱</span></Col>
-        <Col span={12}><TitleSelector arr={selectArr} reloadState={reloadState}/></Col>
+        <Col span={12}><TitleSelector arr={selectArr} toReload={toReload} setToReload={setToReload} /></Col>
       </Row>
     </StyledHeader>
   )

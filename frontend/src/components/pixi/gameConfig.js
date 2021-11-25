@@ -9,7 +9,7 @@ export function deg2Rad(deg){
 export const colorArr = [0x97CBFF, 0xC2FF68, 0xFF5809, 0xFFD306]
 export function getColorIndex(index, length){
   const remainder = index % colorArr.length
-  return (index === length - 1 && remainder == 0)? (index - 1) % length: remainder
+  return (index === length - 1 && remainder === 0)? (index - 1) % length: remainder
 }
 
 /**
