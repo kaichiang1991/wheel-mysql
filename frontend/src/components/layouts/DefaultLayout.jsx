@@ -1,7 +1,7 @@
 
 import { Layout} from 'antd'
 import AppHeader from './AppHeader'
-const {Header, Content} = Layout
+const {Content} = Layout
 
 const mainStyle = {
   height: '100%'

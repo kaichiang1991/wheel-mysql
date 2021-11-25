@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import {Space, Button} from 'antd'
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons"
-import { useRecoilState } from "recoil"
-import { prizeLists } from "../recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { currentListState, prizeLists } from "../recoil"
+import axios from "axios"
 
 const StyledButtonContainer = styled.div `
 
@@ -17,6 +18,8 @@ const StyledButtonContainer = styled.div `
 const ItemButton = ({record: {name, count}}) => {
 
   const [lists, setLists] = useRecoilState(prizeLists)
+  const currentList = useRecoilValue(currentListState)
+
   // 加減個數
   const handleClick = (flag) => {
     return ()=>{
@@ -31,6 +34,7 @@ const ItemButton = ({record: {name, count}}) => {
   // 刪除
   const handleDelete = () => {
     setLists(lists.filter(list => list.name !== name))
+    axios.delete(`/api/prize/${name}/${currentList}`)
   }
 
   return (

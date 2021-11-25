@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil'
 
 export const prizeLists = atom({
-  key: 'prizeList',
+  key: 'prizeLists',
   default: []
 })
 
