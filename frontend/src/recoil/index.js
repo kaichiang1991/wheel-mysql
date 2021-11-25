@@ -14,6 +14,11 @@ export const prizeListInFormData = selector({
 })
 
 export const currentListState = atom({
-  key: 'currentList',
+  key: 'currentListState',
   default: ''
+})
+
+export const toPlayWheel = atom({
+  key: 'toPlayWheel',
+  default: false
 })

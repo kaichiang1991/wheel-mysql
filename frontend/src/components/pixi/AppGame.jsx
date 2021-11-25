@@ -1,7 +1,7 @@
 import { Container, Graphics, PixiComponent, Stage, useApp } from '@inlet/react-pixi'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { prizeLists } from '../../recoil'
+import { prizeLists, toPlayWheel } from '../../recoil'
 import Wheel from './Wheel'
 import Arrow from './Arrow'
 import { arrowOffset, radius } from './gameConfig'
@@ -16,6 +16,7 @@ const Square = ({position}) => {
 const AppGame = ({parentWidth}) => {
   const [app, setApp] = useState()
 
+  // 設定畫布大小
   useEffect(() => {
     if(!app)
       return
@@ -25,6 +26,21 @@ const AppGame = ({parentWidth}) => {
   }, [parentWidth, app])
 
   const [lists] = useRecoilState(prizeLists)
+  const [toPlay, setToPlay] = useRecoilState(toPlayWheel)
+
+  // 遊戲開關
+  useEffect(async ()=>{
+    if(!toPlay)
+      return
+
+    // 開始轉動
+
+    // 轉動結束 ToDo
+    setTimeout(() => {
+      setToPlay(false)
+    }, 3000)
+    
+  }, [toPlay])
 
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{

@@ -6,7 +6,6 @@ import styled from 'styled-components'
 const StyledListContainer = styled(List)`
 
   height: 100%;
-  background-color: gray;
 
   .ant-row{
     width: 100%;
@@ -19,6 +18,7 @@ const GameList = () => {
   return (
     <StyledListContainer
       dataSource={data}
+      bordered={true}
       renderItem={({name, count}) =>(
         <List.Item>
           <Row>
