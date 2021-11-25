@@ -53,16 +53,32 @@ router.post('/', async (req, res) =>{
   res.json({code: 0, newPrize: prize})
 })
 
+/**
+ * 修改獎項資料
+ * /api/prize/(抽獎名稱)
+ * body {
+ *    name: 獎項名稱
+ *    count: 剩餘數量
+ *    origCount: 原始數量
+ * }
+ */
 router.patch('/:name', async (req, res) =>{
   const {name} = req.params, {name: prizeName, count, origCount} = req.body
-  const findPrize = await Prize.findOne({where: {list_name: name, name: prizeName}})
-  if(!findPrize){
-    await Prize.create({name: prizeName, count, origCount, list_name: name})
-    res.json({code: -1, err: 'not found'})
-    return
+  console.dir(`patch ${prizeName} ${count} ${origCount}`)
+  const [prize, isCreated] = await Prize.findOrCreate({where: {list_name: name, name: prizeName}})
+
+  let result = {code: 0}
+  if(isCreated){    // 新的資料
+    await prize.update({count, origCount})
+    result = {...result, prize}
+    console.dir('新增')
+  }else{
+    await prize.update({count, origCount})
+    result = {...result, prize: prize.toJSON()}
+    console.dir('更新')
   }
 
-  await findPrize.update({count, origCount})
-  res.json({code: 0, prize: findPrize})
+  res.json(result)
 })
+
 module.exports = router
