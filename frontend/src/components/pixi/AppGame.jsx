@@ -1,8 +1,19 @@
-import { Stage, useApp } from '@inlet/react-pixi'
-import { useEffect, useState } from 'react'
+import { Container, Graphics, PixiComponent, Stage, useApp } from '@inlet/react-pixi'
+import { useCallback, useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { prizeLists } from '../../recoil'
+import Wheel from './Wheel'
+import Arrow from './Arrow'
+import { arrowOffset, radius } from './gameConfig'
+
+const Square = ({position}) => {
+  const draw = useCallback(g =>{
+    g.beginFill(0xFF0000).drawRect(0, 0, 100, 100).endFill()
+  }, [])
+  return <Graphics position={position || [0, 0]} draw={draw}/>
+}
 
 const AppGame = ({parentWidth}) => {
-
   const [app, setApp] = useState()
 
   useEffect(() => {
@@ -13,11 +24,18 @@ const AppGame = ({parentWidth}) => {
     app.view.style.height = parentWidth + 'px'
   }, [parentWidth, app])
 
+  const [lists] = useRecoilState(prizeLists)
+
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{
-      width: 720, height: 720, resolution: 1
+      width: 720, height: 720, resolution: 1, transparent: true
     }}>
-      
+      <Square />
+      <Square position={[620, 620]}/>
+      <Container position={[300, 300]}>
+        <Wheel lists={lists}/>
+        <Arrow pos={[radius + arrowOffset, 0]}/>
+      </Container>
     </Stage>
   )
 }
