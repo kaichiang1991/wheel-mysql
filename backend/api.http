@@ -6,11 +6,11 @@ POST http://localhost:5000/api/list
 Content-Type: application/json
 
 {
-  "title": "出門購物2"
+  "title": "出門購物5"
 }
 
 ### DELETE List
-DELETE http://localhost:5000/api/list/抽獎1
+DELETE http://localhost:5000/api/list/出門購物4
 
 #####################
 ### GET Prize

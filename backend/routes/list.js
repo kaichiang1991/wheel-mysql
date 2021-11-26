@@ -1,41 +1,26 @@
 var express = require('express');
+const { getAllList, createList, deleteList } = require('../database/list');
 var router = express.Router();
-
-const {Sequelize, DataTypes, Model, where} = require('sequelize')
-const sequelize = new Sequelize('WheelDB', 'root', 'abcd1234', {
-  dialect: 'mysql',
-  host: 'localhost'
-})
-class List extends Model{}
-List.init({
-  title: {type: DataTypes.STRING, unique: true}
-}, {sequelize, tableName: 'List'})
-List.sync()
 
 // 取得所有 List
 router.get('/', async (req, res) =>{
-  const allList = await List.findAll()
+  const allList = await getAllList()
   res.json(allList)
 })
 
 // 新增一個List
 router.post('/', async (req, res) =>{
   const {title} = req.body
-  const newList = await List.create({title}).catch(err =>{
-    res.json({code: -1, err})
-  })
-
-  if(!newList) 
-    return
-  res.json({code: 0, newList})
+  const created = await createList(title)
+  const result = typeof created === 'string'? {code: -1, error: created}: {code: 0, data: created}
+  res.json(result)
 })
 
 // 刪除一個list
 router.delete('/:title', async (req, res) =>{
   const {title} = req.params
-  await List.destroy({where: {title}})
-  // ToDo 刪除 prize 裡面符合的獎項
-  res.json({code: 0})
+  const result = await deleteList(title)
+  res.json(result)
 })
 
 module.exports = router;
