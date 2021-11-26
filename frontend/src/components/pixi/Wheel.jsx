@@ -3,8 +3,8 @@ import { Text } from "pixi.js-legacy";
 import { useCallback } from "react";
 import {colorArr, deg2Rad, getCirclePosWithRadius, getColorIndex, radius, textStyle} from './gameConfig'
 
-const Wheel = ({lists}) => {
-  
+const Wheel = ({lists, refCb}) => {
+
   const draw = useCallback(g =>{
     console.log('callback', lists)
     const totalCount = lists.reduce((pre, curr) => pre + curr.origCount, 0),
@@ -34,7 +34,7 @@ const Wheel = ({lists}) => {
     g.endFill()
   }, [lists])
 
-  return <Graphics draw={draw}/>
+  return <Graphics draw={draw} ref={refCb}/>
 }
 
 export default Wheel
