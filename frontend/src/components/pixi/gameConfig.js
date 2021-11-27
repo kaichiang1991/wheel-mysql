@@ -1,5 +1,5 @@
 import { DEG_TO_RAD, TextStyle} from 'pixi.js-legacy'
-export const radius = 300
+export const radius = 350
 export const arrowOffset = 40
 export const wheelDuration = .5
 export const leastSpinDuration = 3

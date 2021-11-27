@@ -35,7 +35,7 @@ const GamePage = () => {
 
   return (
     <>
-      <Row>
+      <Row style={{marginTop: 40}}>
         <Col ref={containerRef} span={14} >
           <AppGame parentWidth={width}/>
         </Col>

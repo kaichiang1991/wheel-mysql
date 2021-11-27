@@ -163,7 +163,7 @@ const AppGame = ({parentWidth}) => {
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{
       width: 720, height: 720, resolution: 1, transparent: true
     }}>
-      <Container position={[0, 300]}>
+      <Container position={[0, 350]}>
         <Wheel refCb={wheelRef} lists={lists}/>
         <Arrow refCb={arrowRef} pos={[radius + arrowOffset, 0]}/>
         <ResultText refCb={textRef} text={resultText} pos={[radius + arrowOffset + 50, 0]}/>
