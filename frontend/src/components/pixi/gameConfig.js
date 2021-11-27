@@ -34,5 +34,8 @@ export const textStyle = new TextStyle({
 })
 
 export const resultTextStyle = new TextStyle({
-  fontSize: 48
+  fontSize: 48,
+  dropShadow: true,
+  dropShadowAlpha: 0.8,
+  dropShadowColor: "#32c0c3"
 })
