@@ -25,6 +25,14 @@ const getAllPrize = async () => await Prize.findAll()
 const getPrizeByListName = async (list_name) => await Prize.findAll({where: {list_name}})
 
 /**
+ * 取得指定的prize
+ * @param {string} list_name List 名稱
+ * @param {string} name 獎項名稱
+ * @returns 
+ */
+const getOnePrize = async (list_name, name) => await Prize.findOne({where: {list_name, name}})
+
+/**
  * 新增或更新一個獎項
  * @param {*} req.body 
  * @returns 
@@ -53,6 +61,7 @@ const deletePrize = async ({name, list_name}) => {
 module.exports = {
   getAllPrize,
   getPrizeByListName,
+  getOnePrize,
   createOrUpdatePrize,
   deletePrizeByList,
   deletePrize

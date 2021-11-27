@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentListState, prizeLists, toPlayWheel } from '../../recoil'
 import Wheel from './Wheel'
 import Arrow from './Arrow'
-import { arrowOffset, radius, wheelDuration } from './gameConfig'
+import { arrowOffset, leastSpinDuration, radius, wheelDuration } from './gameConfig'
 import gsap, { Power0 } from 'gsap'
 import PixiPlugin from 'gsap/PixiPlugin'
 import { useHistory } from 'react-router'
@@ -83,18 +83,17 @@ const AppGame = ({parentWidth}) => {
       .to(wheel, {duration: .3, pixi: {angle: -30}})
       .to(wheel, spinConfig)
 
-      // ToDo 從後端拿
-      const result = {name: 'c'}
-      setTimeout(() => {
+      const result = (await axios.get(`/api/result/${currentList}`)).data
+      gsap.delayedCall(leastSpinDuration, ()=>{
         // eslint-disable-next-line 
         const [_, repeatTween] = timeline.getChildren()
         repeatTween.repeat(0)
-      }, 1000);
+      })
     }
 
     startSpin()
     
-  }, [toPlay, setToPlay, lists])
+  }, [toPlay, setToPlay, lists, currentList])
 
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{

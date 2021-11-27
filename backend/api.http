@@ -6,7 +6,7 @@ POST http://localhost:5000/api/list
 Content-Type: application/json
 
 {
-  "title": "出門購物"
+  "title": "抽獎1"
 }
 
 ### DELETE List
@@ -24,20 +24,20 @@ POST http://localhost:5000/api/prize
 Content-Type: application/json
 
 {
-  "name": "ef",
-  "count": 5,
-  "origCount": 10,
-  "list_name": "出門購物"
+  "name": "c",
+  "count": 2,
+  "origCount": 2,
+  "list_name": "抽獎1"
 }
 
 ### PATCH
-PATCH http://localhost:5000/api/prize/抽獎6
+PATCH http://localhost:5000/api/prize/抽獎1
 Content-Type: application/json
 
 {
-  "name": "e",
-  "count": 5,
-  "origCount": 5
+  "name": "c",
+  "count": 2,
+  "origCount": 2
 }
 
 ### DELETE
@@ -45,3 +45,16 @@ DELETE  http://localhost:5000/api/prize/n3/抽獎1
 
 ### DELETE All
 DELETE http://localhost:5000/api/prize/all/555
+
+####### Result
+### Get result
+GET http://localhost:5000/api/result/抽獎1
+
+
+### POST result
+POST http://localhost:5000/api/result/抽獎1
+Content-Type: application/json
+
+{
+  "name": "c"
+}

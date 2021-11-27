@@ -2,6 +2,7 @@ import { DEG_TO_RAD, TextStyle} from 'pixi.js-legacy'
 export const radius = 300
 export const arrowOffset = 15
 export const wheelDuration = 1
+export const leastSpinDuration = 3
 
 export function deg2Rad(deg){
   return deg * DEG_TO_RAD
