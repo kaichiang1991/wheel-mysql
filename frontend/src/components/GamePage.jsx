@@ -1,4 +1,4 @@
-import {Row, Col, Divider, Button} from 'antd'
+import {Row, Col, Button} from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import GameList from './GameList'
 import AppGame from './pixi/AppGame'
@@ -43,8 +43,7 @@ const GamePage = () => {
           <GameList />
         </Col>
       </Row>
-      <Divider />
-      <Row>
+      <Row style={{marginTop: 40}}>
         <Col span={24} style={{textAlign: 'center'}}>
           <Button disabled={disabled} size="large" type="primary" shape="round" icon={<PlayCircleFilled />} onClick={()=> setToPlay(true)} >抽獎</Button>
         </Col>

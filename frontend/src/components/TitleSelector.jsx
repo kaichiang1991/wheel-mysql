@@ -42,7 +42,8 @@ const TitleSelector = ({arr, toReload, setToReload}) => {
 
   const {pathname} = useLocation()
   return (
-    <StyledSelect disabled={pathname === '/game'} onSelect={(e)=> setCurrList(arr.find(obj => obj.id == e + '').title)} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
+    // eslint-disable-next-line
+    <StyledSelect disabled={pathname === '/game'} onSelect={(e)=> setCurrList(arr.find(obj => obj.id == e ).title)} size='large' placeholder='請選擇抽獎名稱' dropdownStyle={{width: '100%'}} dropdownRender={menu => (
       <div>
         {menu}
         <Divider style={{margin: '4px 0'}}/>

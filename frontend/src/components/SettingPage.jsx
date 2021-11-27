@@ -1,4 +1,4 @@
-import { Button, Col, Row } from "antd"
+import { Button } from "antd"
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
@@ -34,19 +34,9 @@ const SettingPage = () => {
       <LoadButton />
       <AddItem />
       <ItemList />
-      <Row>
-        <Col offset={20} span={4}><Button onClick={handleClick}>開始抽獎</Button></Col>
-      </Row>
+      <Button style={{position: 'absolute', right: 20}} onClick={handleClick}>開始抽獎</Button>
     </>
   )
 }
 
-const FallbackSetting = () => {
-  return (
-    <React.Suspense fallback={()=> (<h1>Suspending...</h1>)}>
-      <SettingPage />
-    </ React.Suspense>
-  )
-}
-
-export default FallbackSetting
+export default SettingPage

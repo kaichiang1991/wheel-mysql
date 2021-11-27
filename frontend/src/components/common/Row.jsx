@@ -9,7 +9,7 @@ const PaddingRow = styled(Space) `
 
 const CustomRow = ({children}) =>{
   return (
-    <div>
+    <div >
     <PaddingRow>
       {children}
     </PaddingRow>

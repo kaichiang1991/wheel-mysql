@@ -22,7 +22,7 @@ const AddItem = () => {
   }
 
   return (
-    <CustomRow>
+    <CustomRow >
       <Form 
         style={{alignItems: 'flex-end', justifyContent: 'space-between'}}
         form={form}

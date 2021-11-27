@@ -58,7 +58,7 @@ const AppGame = ({parentWidth}) => {
     }
     wheel.on(boundEvent, callback)
 
-  }, [setResultText, lists])
+  }, [resultText, setResultText, lists])
 
   // 遊戲開關
   useEffect(()=>{
@@ -106,10 +106,11 @@ const AppGame = ({parentWidth}) => {
     const spinStop = async ({name}) => {
       wheel.angle %= 360
       const angle = getResultAngle(name)
+      const duration = wheelDuration * 3
       // 先轉到原點
       gsap.timeline()
-      .to(wheel, {duration: wheelDuration * (360 - wheel.angle) / 360, pixi: {angle: 360}})
-      .to(wheel, {duration: wheelDuration * angle / 360, pixi: {angle}})
+      .to(wheel, {duration: duration * (360 - wheel.angle) / 360, pixi: {angle: 360}})
+      .to(wheel, {duration: duration * angle / 360, pixi: {angle}})
       .eventCallback('onUpdate', ()=> calcCurrentIndex((wheel.angle + 360)% 360))
       .eventCallback('onComplete', async ()=>{
         wheel.angle %= 360

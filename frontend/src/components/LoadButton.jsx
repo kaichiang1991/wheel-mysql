@@ -31,7 +31,7 @@ const LoadButton = () => {
 
   return (
     <>
-      <Row >
+      <Row style={{marginTop: 12}}>
         <Col span={10} offset={2}><Button onClick={handleLoadClick}>讀取</Button></Col>
         <Col span={12}>
           <Upload {...props}>
