@@ -7,10 +7,20 @@ const { getPrizeByListName, createOrUpdatePrize, getOnePrize } = require('./priz
 const getResult = async (list_name) => {
   const result = await getPrizeByListName(list_name)
   const datas = result.map(r => r.toJSON())
-  const arr = datas.reduce((pre, curr) => [...pre, ...Array(curr.origCount).fill(curr.name)], [])
-  const randomIdx = Math.floor(Math.random() * arr.length)
+  const totalCount = datas.reduce((pre, curr) => pre + curr.count, 0)
+  if(totalCount == 0){      // 沒有剩餘獎項
+    return {code: -1, error: '沒有獎品'}
+  }
 
-  return datas.find(data => data.name === arr[randomIdx])
+  const arr = datas.reduce((pre, curr) => [...pre, ...Array(curr.origCount).fill(curr.name)], [])
+  let data
+  do{
+    const randomIdx = Math.floor(Math.random() * arr.length)
+    const findFn = data => data.name === arr[randomIdx]
+    data = datas.find(findFn).count > 0? datas.find(findFn): null
+  }while(!data)
+
+  return data
 }
 
 /**

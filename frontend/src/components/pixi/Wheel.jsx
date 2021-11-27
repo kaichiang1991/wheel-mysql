@@ -6,10 +6,12 @@ import {colorArr, deg2Rad, getCirclePosWithRadius, getColorIndex, radius, textSt
 const Wheel = ({lists, refCb}) => {
 
   const draw = useCallback(g =>{
-    console.log('callback', lists)
     const totalCount = lists.reduce((pre, curr) => pre + curr.origCount, 0),
-    listCount = lists.length
+    listCount = lists.length,
+    disableColor = 0xc1c1c1
+
     let currentDeg = 0
+
     g.clear()
     lists.map((list, index) =>{
       const {origCount} = list
@@ -17,7 +19,7 @@ const Wheel = ({lists, refCb}) => {
 
       g.moveTo(0, 0)
       .lineStyle(2, 0)
-      .beginFill(colorArr[getColorIndex(index, listCount)])
+      .beginFill(list.count > 0? colorArr[getColorIndex(index, listCount)]: disableColor)
       .arc(0, 0, radius, deg2Rad(currentDeg), deg2Rad(nextDegree), true)
 
       // 上面的文字

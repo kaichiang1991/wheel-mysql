@@ -4,6 +4,8 @@ import TitleSelector from "../TitleSelector"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
+import { useSetRecoilState } from "recoil"
+import { currentListState } from "../../recoil"
 
 const StyledHeader = styled(Layout.Header)`
 
@@ -24,14 +26,16 @@ const StyledHeader = styled(Layout.Header)`
 const AppHeader = () => {
   const [selectArr, setSelectArr] = useState([])
   const [toReload, setToReload] = useState(true)
+  const setCurrentList = useSetRecoilState(currentListState)
   
   // 重新取得所有 list
   useEffect(()=>{
     (async ()=>{
       const r = await axios.get('/api/list')
       setSelectArr(r.data)
+      setCurrentList(r.data[0].title)
     })()
-  }, [toReload])
+  }, [toReload, setCurrentList])
 
   const history = useHistory()
   const handleClick = () => {

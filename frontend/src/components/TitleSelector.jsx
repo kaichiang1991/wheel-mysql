@@ -47,7 +47,7 @@ const TitleSelector = ({arr, toReload, setToReload}) => {
         {menu}
         <Divider style={{margin: '4px 0'}}/>
         <StyledInputContainer>
-          <Input onChange={handleNameChange} value={currList}/>
+          <Input onChange={handleNameChange} value={currList} />
           <PlusOutlined onClick={addItem}/>
         </StyledInputContainer>
       </div>

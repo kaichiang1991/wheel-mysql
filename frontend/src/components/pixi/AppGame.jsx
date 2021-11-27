@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentListState, prizeLists, toPlayWheel } from '../../recoil'
 import Wheel from './Wheel'
 import Arrow from './Arrow'
-import { arrowOffset, leastSpinDuration, radius, wheelDuration } from './gameConfig'
+import { arrowOffset, leastSpinDuration, radius, revertAngle, wheelDuration } from './gameConfig'
 import gsap, { Power0 } from 'gsap'
 import PixiPlugin from 'gsap/PixiPlugin'
 import { useHistory } from 'react-router'
@@ -36,7 +36,7 @@ const AppGame = ({parentWidth}) => {
     app.view.style.height = parentWidth + 'px'
   }, [parentWidth, app])
 
-  const [lists] = useRecoilState(prizeLists)
+  const [lists, setLists] = useRecoilState(prizeLists)
   const [toPlay, setToPlay] = useRecoilState(toPlayWheel)
   const wheelRef = useRef()
 
@@ -66,12 +66,17 @@ const AppGame = ({parentWidth}) => {
 
     const spinStop = async ({name}) => {
       console.log('spin stop', name)
+      wheel.angle %= 360
+      const angle = getResultAngle(name)
       // 先轉到原點
       gsap.timeline()
       .to(wheel, {duration: wheelDuration * (360 - wheel.angle) / 360, pixi: {angle: 360}})
-      .to(wheel, {pixi: {angle: getResultAngle(name)}})
-      .eventCallback('onComplete', ()=>{
-
+      .to(wheel, {duration: wheelDuration * angle / 360, pixi: {angle}})
+      .eventCallback('onComplete', async ()=>{
+        wheel.angle %= 360
+        const r = await axios.post(`/api/result/${currentList}`, {name})
+        const newList = lists.map(list => list.name === r.data.name? r.data: list)
+        setLists(newList)
         setToPlay(false)
       })
     }
@@ -80,20 +85,26 @@ const AppGame = ({parentWidth}) => {
     const startSpin = async () =>{
       const spinConfig = {duration: wheelDuration, repeat: -1, pixi: {angle: '+=360'}, onComplete: ()=> spinStop(result)}
       const timeline = gsap.timeline()
-      .to(wheel, {duration: .3, pixi: {angle: -30}})
+      .to(wheel, {duration: .3, pixi: {angle: `-=${revertAngle}`}})
       .to(wheel, spinConfig)
 
       const result = (await axios.get(`/api/result/${currentList}`)).data
+      if(result.code < 0){         // 防呆
+        alert('沒有獎項')
+        return
+      }
+
       gsap.delayedCall(leastSpinDuration, ()=>{
         // eslint-disable-next-line 
         const [_, repeatTween] = timeline.getChildren()
-        repeatTween.repeat(0)
+        const times = Math.floor(repeatTween.totalTime() / repeatTween.duration())
+        repeatTween.repeat(times)
       })
     }
 
     startSpin()
     
-  }, [toPlay, setToPlay, lists, currentList])
+  }, [toPlay, setToPlay, lists, setLists, currentList])
 
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{

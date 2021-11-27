@@ -56,5 +56,5 @@ POST http://localhost:5000/api/result/抽獎1
 Content-Type: application/json
 
 {
-  "name": "c"
+  "name": "b"
 }

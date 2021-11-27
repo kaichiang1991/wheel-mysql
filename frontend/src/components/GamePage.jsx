@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import GameList from './GameList'
 import AppGame from './pixi/AppGame'
 import { PlayCircleFilled } from "@ant-design/icons"
-import { useRecoilState } from 'recoil'
-import { toPlayWheel } from '../recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { prizeLists, toPlayWheel } from '../recoil'
 
 const GamePage = () => {
 
   const containerRef = useRef()
   const [disabled, setDisabled] = useState(false)
   const [toPlay, setToPlay] = useRecoilState(toPlayWheel)
+  const lists = useRecoilValue(prizeLists)
 
   const [width, setWidth] = useState(0)
   useEffect(()=>{
@@ -27,8 +28,10 @@ const GamePage = () => {
   }, [])
 
   useEffect(()=>{
-    setDisabled(toPlay)
-  }, [toPlay])
+    const remainCount = lists.reduce((pre, curr) => pre + curr.count, 0)
+    const flag = remainCount <= 0? true: toPlay
+    setDisabled(flag)
+  }, [toPlay, lists])
 
   return (
     <>

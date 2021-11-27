@@ -3,6 +3,7 @@ export const radius = 300
 export const arrowOffset = 15
 export const wheelDuration = 1
 export const leastSpinDuration = 3
+export const revertAngle = 15       // 回拉的角度
 
 export function deg2Rad(deg){
   return deg * DEG_TO_RAD

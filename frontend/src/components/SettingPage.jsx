@@ -13,7 +13,7 @@ const SettingPage = () => {
   const [lists, setLists] = useRecoilState(prizeLists)
   const [toNext, setToNext] = useState(false)
   const history = useHistory()
-
+  
   useEffect(()=>{
     if(!toNext)
       return
