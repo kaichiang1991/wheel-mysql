@@ -18,7 +18,7 @@ const Wheel = ({lists, refCb}) => {
       const nextDegree = currentDeg - (origCount / totalCount) * 360
 
       g.moveTo(0, 0)
-      .lineStyle(2, 0)
+      .lineStyle(2, 0xFFFFFF)
       .beginFill(list.count > 0? colorArr[getColorIndex(index, listCount)]: disableColor)
       .arc(0, 0, radius, deg2Rad(currentDeg), deg2Rad(nextDegree), true)
 
@@ -33,7 +33,10 @@ const Wheel = ({lists, refCb}) => {
       currentDeg = nextDegree
       return null
     })
-    g.endFill()
+
+    g.beginFill(0xDDDDDD)
+    .drawCircle(0, 0, radius * .2)
+    .endFill()
   }, [lists])
 
   return <Graphics draw={draw} ref={refCb}/>

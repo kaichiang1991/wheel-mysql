@@ -1,23 +1,20 @@
-import { Container, Graphics, Stage } from '@inlet/react-pixi'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Container, Stage } from '@inlet/react-pixi'
+import { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentListState, prizeLists, toPlayWheel } from '../../recoil'
 import Wheel from './Wheel'
 import Arrow from './Arrow'
+import ResultText from './ResultText'
 import { arrowOffset, leastSpinDuration, radius, revertAngle, wheelDuration } from './gameConfig'
-import gsap, { Power0 } from 'gsap'
+import gsap, { Power0, Power1, Elastic } from 'gsap'
 import PixiPlugin from 'gsap/PixiPlugin'
 import { useHistory } from 'react-router'
 import axios from 'axios'
+
 gsap.registerPlugin(PixiPlugin)
 gsap.defaults({ease: Power0.easeNone})
-
-const Square = ({position}) => {
-  const draw = useCallback(g =>{
-    g.beginFill(0xFF0000).drawRect(0, 0, 100, 100).endFill()
-  }, [])
-  return <Graphics position={position || [0, 0]} draw={draw}/>
-}
+const boundEvent = 'boundEvent'
+let boundIndex = -1
 
 const AppGame = ({parentWidth}) => {
   const [app, setApp] = useState()
@@ -38,7 +35,31 @@ const AppGame = ({parentWidth}) => {
 
   const [lists, setLists] = useRecoilState(prizeLists)
   const [toPlay, setToPlay] = useRecoilState(toPlayWheel)
-  const wheelRef = useRef()
+  const wheelRef = useRef(), arrowRef = useRef()
+  const [resultText, setResultText] = useState('')
+
+  useEffect(()=>{    
+    if(resultText)
+      return
+
+    const wheel = wheelRef.current, arrow = arrowRef.current
+    console.log(arrow.anchor, arrow.position)
+    // 箭頭抖動
+    const arrowTimeline = gsap.timeline()
+    .to(arrow, {duration: .2, ease: Power1.easeOut, angle: '-=15'})
+    .to(arrow, {duration: .45, ease: Elastic.easeOut.config(1.75, .5), angle: '+=15'})
+    .pause()
+
+    const callback = index => {
+      boundIndex = index
+      arrowTimeline.isActive() && arrowTimeline.kill()
+      arrowTimeline.totalProgress(0).play()
+      setResultText(lists[boundIndex].name)
+    }
+    wheel.on(boundEvent, callback)
+
+    return ()=> wheel.off(boundEvent, callback)
+  }, [setResultText, lists])
 
   // 遊戲開關
   useEffect(()=>{
@@ -47,6 +68,19 @@ const AppGame = ({parentWidth}) => {
 
     const wheel = wheelRef.current
 
+    /**
+     * 設定目前指到的獎項 index
+     * @param {*} angle 角度 degree
+     */
+    const calcCurrentIndex = (angle)=>{
+      const totalCount = lists.reduce((pre, curr) => pre + curr.origCount, 0)
+      const key = wheel.angle < 0? boundIndex: lists.findIndex((_, idx) => angle <= lists.slice(0, idx + 1).reduce((pre, curr) => pre + (curr.origCount / totalCount * 360), 0))
+
+      if(key !== boundIndex && key > -1){
+        wheel.emit(boundEvent, key)     // 通知換邊界了
+      }
+    }
+        
     /**
      * 取得結果角度
      * @param {string} name 結果名字
@@ -65,13 +99,13 @@ const AppGame = ({parentWidth}) => {
     }
 
     const spinStop = async ({name}) => {
-      console.log('spin stop', name)
       wheel.angle %= 360
       const angle = getResultAngle(name)
       // 先轉到原點
       gsap.timeline()
       .to(wheel, {duration: wheelDuration * (360 - wheel.angle) / 360, pixi: {angle: 360}})
       .to(wheel, {duration: wheelDuration * angle / 360, pixi: {angle}})
+      .eventCallback('onUpdate', ()=> calcCurrentIndex((wheel.angle + 360)% 360))
       .eventCallback('onComplete', async ()=>{
         wheel.angle %= 360
         const r = await axios.post(`/api/result/${currentList}`, {name})
@@ -83,10 +117,19 @@ const AppGame = ({parentWidth}) => {
 
     // 開始轉動
     const startSpin = async () =>{
-      const spinConfig = {duration: wheelDuration, repeat: -1, pixi: {angle: '+=360'}, onComplete: ()=> spinStop(result)}
+      const spinConfig = {duration: wheelDuration, repeat: -1, pixi: {angle: '+=360'}
+        , onUpdate: ()=> wheel.angle = (wheel.angle + 360)% 360
+        , onComplete: ()=> {
+          timeline.eventCallback('onUpdate', null)
+          spinStop(result)
+        }
+      }
+      boundIndex = lists.length - 1
+      
       const timeline = gsap.timeline()
       .to(wheel, {duration: .3, pixi: {angle: `-=${revertAngle}`}})
       .to(wheel, spinConfig)
+      .eventCallback('onUpdate', ()=> calcCurrentIndex(wheel.angle))
 
       const result = (await axios.get(`/api/result/${currentList}`)).data
       if(result.code < 0){         // 防呆
@@ -110,11 +153,10 @@ const AppGame = ({parentWidth}) => {
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{
       width: 720, height: 720, resolution: 1, transparent: true
     }}>
-      <Square />
-      <Square position={[620, 620]}/>
-      <Container position={[300, 300]}>
+      <Container position={[0, 300]}>
         <Wheel refCb={wheelRef} lists={lists}/>
-        <Arrow pos={[radius + arrowOffset, 0]}/>
+        <Arrow refCb={arrowRef} pos={[radius + arrowOffset, 0]}/>
+        <ResultText text={resultText} pos={[radius + arrowOffset + 50, 0]}/>
       </Container>
     </Stage>
   )
