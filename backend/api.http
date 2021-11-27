@@ -6,36 +6,36 @@ POST http://localhost:5000/api/list
 Content-Type: application/json
 
 {
-  "title": "出門購物5"
+  "title": "出門購物"
 }
 
 ### DELETE List
-DELETE http://localhost:5000/api/list/出門購物4
+DELETE http://localhost:5000/api/list/抽獎16
 
 #####################
 ### GET Prize
 GET http://localhost:5000/api/prize
 
 ### Get From List
-GET http://localhost:5000/api/prize/抽獎2
+GET http://localhost:5000/api/prize/抽獎1
 
 ### POST
 POST http://localhost:5000/api/prize
 Content-Type: application/json
 
 {
-  "name": "e",
-  "count": 10,
+  "name": "ef",
+  "count": 5,
   "origCount": 10,
-  "list_name": "抽獎1"
+  "list_name": "出門購物"
 }
 
 ### PATCH
-PATCH http://localhost:5000/api/prize/抽獎1
+PATCH http://localhost:5000/api/prize/抽獎6
 Content-Type: application/json
 
 {
-  "name": "c",
+  "name": "e",
   "count": 5,
   "origCount": 5
 }
@@ -44,4 +44,4 @@ Content-Type: application/json
 DELETE  http://localhost:5000/api/prize/n3/抽獎1
 
 ### DELETE All
-DELETE http://localhost:5000/api/prize/all/抽獎2
+DELETE http://localhost:5000/api/prize/all/555

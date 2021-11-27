@@ -1,39 +1,20 @@
 const express = require('express')
+const { getAllPrize, getPrizeByListName, createOrUpdatePrize, deletePrizeByList, deletePrize } = require('../database/prize')
 const router = express.Router()
 
-// 連接 ＤＢ
-const {Sequelize, DataTypes, Model, where} = require('sequelize')
-const sequelize = new Sequelize('WheelDB', 'root', 'abcd1234', {
-  dialect: 'mysql',
-  host: 'localhost'
-})
-
-try{
-  sequelize.authenticate().then(_ => console.log('auth success.'))
-}catch(err){
-  console.error('auth error', err)
-}
-
-// 製作 Table
-class Prize extends Model{}
-Prize.init({
-  name: {type: DataTypes.STRING},
-  count: {type: DataTypes.INTEGER},
-  origCount: {type: DataTypes.INTEGER},
-  list_name: {type: DataTypes.STRING}
-}, {sequelize, tableName: 'Prize'})
-Prize.sync()
-
+// 取得所有 Prize
 router.get('/', async (req, res) =>{
-  const allPrize = await Prize.findAll()
-  console.log(allPrize)
+  const allPrize = await getAllPrize()
   res.json(allPrize)
 })
 
+/**
+ * 取得指定List名稱的Prize
+ * /api/prize/{List名稱}
+ */
 router.get('/:name', async (req, res) =>{
-  const {name} = req.params
-  const findPrize = await Prize.findAll({where: {list_name: name}})
-  res.json(findPrize)
+  const allResult = await getPrizeByListName(req.params.name)
+  res.json(allResult)
 })
 
 /**
@@ -46,20 +27,8 @@ router.get('/:name', async (req, res) =>{
  * }
  */
 router.post('/', async (req, res) =>{
-  const {name, count, origCount, list_name} = req.body
-
-  const [prize, isCreated] = await Prize.findOrCreate({where: {list_name, name}})
-  let result = {code: 0}
-  if(isCreated){
-    console.dir('新增')
-    await prize.update({count, origCount})
-    result = {...result, prize}
-  }else{
-    console.dir('已存在')
-    result = {...result, code: -1, data: '已存在'}
-  }
-
-  res.json(result)
+  const {prize, isCreated} = await createOrUpdatePrize(req.body)
+  res.json({code: 0, prize, data: isCreated? '新增': '更新'})
 })
 
 /**
@@ -71,32 +40,17 @@ router.post('/', async (req, res) =>{
  *    origCount: 原始數量
  * }
  */
-router.patch('/:name', async (req, res) =>{
-  const {name} = req.params, {name: prizeName, count, origCount} = req.body
-  console.dir(`patch ${prizeName} ${count} ${origCount}`)
-  const [prize, isCreated] = await Prize.findOrCreate({where: {list_name: name, name: prizeName}})
-
-  let result = {code: 0}
-  if(isCreated){    // 新的資料
-    await prize.update({count, origCount})
-    result = {...result, prize}
-    console.dir('新增')
-  }else{
-    await prize.update({count, origCount})
-    result = {...result, prize}
-    console.dir('更新')
-  }
-
-  res.json(result)
+router.patch('/:list_name', async (req, res) =>{
+  const {prize, isCreated} = await createOrUpdatePrize({...req.body, list_name: req.params.list_name})
+  res.json({code: 0, prize, data: isCreated? '新增': '更新'})
 })
 
 /**
  * 刪除某個列表的全部 item
  */
 router.delete('/all/:list_name', async (req, res) =>{
-  const {list_name} = req.params
-  const count = await Prize.destroy({where: {list_name}})
-  res.json({code: 0, count})
+  const result = await deletePrizeByList(req.params)
+  res.json(result)
 })
 
 
@@ -105,9 +59,8 @@ router.delete('/all/:list_name', async (req, res) =>{
  * /api/prize/{獎項名稱}/{列表名稱}
  */
 router.delete('/:name/:list_name', async (req, res) =>{
-  const {name, list_name} = req.params
-  const count = await Prize.destroy({where: {list_name, name}})
-  res.json({code: 0, count})
+  const result = await deletePrize(req.params)
+  res.json(result)
 })
 
 module.exports = router

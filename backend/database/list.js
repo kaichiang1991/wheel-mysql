@@ -1,8 +1,7 @@
-const {Sequelize, DataTypes, Model, where} = require('sequelize')
-const sequelize = new Sequelize('WheelDB', 'root', 'abcd1234', {
-  dialect: 'mysql',
-  host: 'localhost'
-})
+const { DataTypes, Model} = require('sequelize')
+const sequelize = require('./')
+const { deletePrizeByList } = require('./prize')
+
 class List extends Model{}
 List.init({
   title: {type: DataTypes.STRING, unique: true}
@@ -33,7 +32,7 @@ const createList = async (title) => {
  */
 const deleteList = async (title) => {
   const count = await List.destroy({where: {title}})
-  // ToDo 刪除 prize 裡面符合的獎項
+  await deletePrizeByList({list_name: title})
   return {code: 0, count}
 }
 
