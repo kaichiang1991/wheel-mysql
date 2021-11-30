@@ -1,0 +1,7 @@
+runtime: nodejs14
+
+env_variables:
+  DB_USER: root
+  DB_NAME: wheel
+  DB_PASS: abcd1234
+  DB_INSTANCE: "wheel-server:asia-east1:wheel-instance"

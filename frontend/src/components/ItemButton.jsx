@@ -3,7 +3,7 @@ import {Space, Button} from 'antd'
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { currentListState, prizeLists } from "../recoil"
-import axios from "axios"
+import fetchData from "../server"
 
 const StyledButtonContainer = styled.div `
 
@@ -34,7 +34,7 @@ const ItemButton = ({record: {name, count}}) => {
   // 刪除
   const handleDelete = () => {
     setLists(lists.filter(list => list.name !== name))
-    axios.delete(`/api/prize/${name}/${currentList}`)
+    fetchData(`/api/prize/${name}/${currentList}`, 'DELETE')
   }
 
   return (

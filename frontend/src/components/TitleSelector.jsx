@@ -1,10 +1,10 @@
 import { Select, Divider, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components'
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { currentListState } from '../recoil';
 import { useLocation } from 'react-router-dom';
+import fetchData from '../server';
 
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ const TitleSelector = ({arr, toReload, setToReload}) => {
       return
     }
 
-    await axios.post('/api/list', {title: currList})
+    await fetchData('/api/list', 'POST', {title: currList})
     setToReload(!toReload)
   }
 

@@ -9,7 +9,7 @@ import { arrowOffset, leastSpinDuration, radius, revertAngle, wheelDuration } fr
 import gsap, { Power0, Power1, Elastic, Back } from 'gsap'
 import PixiPlugin from 'gsap/PixiPlugin'
 import { useHistory } from 'react-router'
-import axios from 'axios'
+import fetchData from '../../server'
 
 gsap.registerPlugin(PixiPlugin)
 gsap.defaults({ease: Power0.easeNone})
@@ -114,8 +114,8 @@ const AppGame = ({parentWidth}) => {
       .eventCallback('onUpdate', ()=> calcCurrentIndex((wheel.angle + 360)% 360))
       .eventCallback('onComplete', async ()=>{
         wheel.angle %= 360
-        const r = await axios.post(`/api/result/${currentList}`, {name})
-        const newList = lists.map(list => list.name === r.data.name? r.data: list)
+        const data = await fetchData(`/api/result/${currentList}`, 'POST', {name})
+        const newList = lists.map(list => list.name === data.name? data: list)
         await playResultTextAnim()
         gsap.set(text, {pixi: {scale: 1}})
         setLists(newList)
@@ -141,7 +141,7 @@ const AppGame = ({parentWidth}) => {
       .to(wheel, spinConfig)
       .eventCallback('onUpdate', ()=> calcCurrentIndex(wheel.angle))
 
-      const result = (await axios.get(`/api/result/${currentList}`)).data
+      const result = await fetchData(`/api/result/${currentList}`)
       if(result.code < 0){         // 防呆
         alert('沒有獎項')
         return

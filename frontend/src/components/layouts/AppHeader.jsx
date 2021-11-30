@@ -2,10 +2,10 @@ import styled from "styled-components"
 import { Layout, Row, Col } from 'antd'
 import TitleSelector from "../TitleSelector"
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { useHistory } from "react-router-dom"
 import { useSetRecoilState } from "recoil"
 import { currentListState } from "../../recoil"
+import fetchData from "../../server"
 
 const StyledHeader = styled(Layout.Header)`
 
@@ -31,9 +31,8 @@ const AppHeader = () => {
   // 重新取得所有 list
   useEffect(()=>{
     (async ()=>{
-      const r = await axios.get('/api/list')
-      setSelectArr(r.data)
-      setCurrentList(r.data[0].title)
+      const data = await fetchData('/api/list')
+      setSelectArr(data)
     })()
   }, [toReload, setCurrentList])
 
