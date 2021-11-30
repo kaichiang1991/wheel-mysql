@@ -1,3 +1,4 @@
+require('dotenv').config()
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -8,7 +9,7 @@ var cors = require('cors')
 var apiRouter = require('./routes/api');
 
 var app = express();
-
+app.enable('trust proxy');
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
