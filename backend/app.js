@@ -1,10 +1,11 @@
-require('dotenv').config()
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
+const envPath = path.resolve(process.cwd(), process.env.NODE_ENV === 'development'? '.env.local': '.env.production')
+require('dotenv').config({ path: envPath })
 
 var apiRouter = require('./routes/api');
 
