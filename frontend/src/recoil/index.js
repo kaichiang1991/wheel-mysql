@@ -1,5 +1,7 @@
 import { atom, selector } from 'recoil'
 
+const prod = process.env.NODE_ENV === 'production'
+
 export const prizeLists = atom({
   key: 'prizeLists',
   default: []
@@ -15,7 +17,7 @@ export const prizeListInFormData = selector({
 
 export const currentListState = atom({
   key: 'currentListState',
-  default: ''
+  default: prod? '': '清單1'
 })
 
 export const toPlayWheel = atom({

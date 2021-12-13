@@ -1,11 +1,7 @@
 import styled from "styled-components"
 import { Layout, Row, Col } from 'antd'
 import TitleSelector from "../TitleSelector"
-import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { useSetRecoilState } from "recoil"
-import { currentListState } from "../../recoil"
-import fetchData from "../../server"
 
 const StyledHeader = styled(Layout.Header)`
 
@@ -24,18 +20,6 @@ const StyledHeader = styled(Layout.Header)`
 `
 
 const AppHeader = () => {
-  const [selectArr, setSelectArr] = useState([])
-  const [toReload, setToReload] = useState(true)
-  const setCurrentList = useSetRecoilState(currentListState)
-  
-  // 重新取得所有 list
-  useEffect(()=>{
-    (async ()=>{
-      const data = await fetchData('/api/list')
-      setSelectArr(data)
-    })()
-  }, [toReload, setCurrentList])
-
   const history = useHistory()
   const handleClick = () => {
     history.push('/')
@@ -45,7 +29,7 @@ const AppHeader = () => {
     <StyledHeader>
       <Row>
         <Col span={12}><span onClick={handleClick}>抽獎名稱</span></Col>
-        <Col span={12}><TitleSelector arr={selectArr} toReload={toReload} setToReload={setToReload} /></Col>
+        <Col span={12}><TitleSelector /></Col>
       </Row>
     </StyledHeader>
   )

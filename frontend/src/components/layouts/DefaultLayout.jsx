@@ -1,4 +1,3 @@
-
 import { Layout} from 'antd'
 import AppHeader from './AppHeader'
 const {Content} = Layout
@@ -7,7 +6,7 @@ const mainStyle = {
   height: '100%'
 }
 
-const DefaultLayout = ({title, children}) => {
+const DefaultLayout = ({children}) => {
   return (
     <Layout >
       <AppHeader />
