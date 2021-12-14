@@ -1,5 +1,5 @@
 import { Button } from "antd"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useHistory } from "react-router-dom"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { currentListState, prizeLists } from "../recoil"

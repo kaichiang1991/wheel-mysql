@@ -8,7 +8,7 @@ import ResultText from './ResultText'
 import { arrowOffset, leastSpinDuration, radius, revertAngle, wheelDuration } from './gameConfig'
 import gsap, { Power0, Power1, Elastic, Back } from 'gsap'
 import PixiPlugin from 'gsap/PixiPlugin'
-import { useHistory } from 'react-router'
+import {useHistory} from 'react-router-dom'
 import fetchData from '../../server'
 
 gsap.registerPlugin(PixiPlugin)
@@ -38,6 +38,7 @@ const AppGame = ({parentWidth}) => {
   const wheelRef = useRef(), arrowRef = useRef(), textRef = useRef()
   const [resultText, setResultText] = useState('')
 
+  // 播放結果文字 和 註冊箭頭抖動
   useEffect(()=>{    
     if(resultText)
       return
@@ -114,8 +115,8 @@ const AppGame = ({parentWidth}) => {
       .eventCallback('onUpdate', ()=> calcCurrentIndex((wheel.angle + 360)% 360))
       .eventCallback('onComplete', async ()=>{
         wheel.angle %= 360
-        const data = await fetchData(`/api/result/${currentList}`, 'POST', {name})
-        const newList = lists.map(list => list.name === data.name? data: list)
+        // const data = await fetchData(`/api/result/${currentList}`, 'POST', {name})
+        const newList = lists.map(list => list.name === name? {...list, count: list.count - 1}: list)
         await playResultTextAnim()
         gsap.set(text, {pixi: {scale: 1}})
         setLists(newList)
@@ -158,7 +159,7 @@ const AppGame = ({parentWidth}) => {
     startSpin()
     
   }, [toPlay, setToPlay, lists, setLists, currentList])
-
+  
   return (
     <Stage width={720} height={720} onMount={e => setApp(e)} options={{
       width: 720, height: 720, resolution: 1, transparent: true
