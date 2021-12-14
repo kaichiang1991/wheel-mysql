@@ -14,7 +14,6 @@ const AddItem = () => {
 
     if(lists.find(list => list.name === name)){
       alert('duplicate')      // ToDo 重複的錯誤提示
-
       return
     }
     

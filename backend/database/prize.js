@@ -33,14 +33,23 @@ const getPrizeByListName = async (list_name) => await Prize.findAll({where: {lis
 const getOnePrize = async (list_name, name) => await Prize.findOne({where: {list_name, name}})
 
 /**
- * 新增或更新一個獎項
- * @param {*} req.body 
+ * 更新抽獎名單內的全部獎項
+ * @param {*} 
  * @returns 
  */
-const createOrUpdatePrize = async ({name, count, origCount, list_name}) => {
-  const [prize, isCreated] = await Prize.findOrCreate({where: {name, list_name}})
-  await prize.update({count, origCount})
-  return {prize, isCreated}
+const patchAllPrize = async ({list_name, lists}) => {
+  // 找出全部該抽獎項的獎項
+  const allPrize = await getPrizeByListName(list_name)
+  const allResult = lists.map(async ({name, count, origCount}) => {
+    let prize
+    if(prize = allPrize.find(prize => prize.name === name)){    // 在原本資料庫中有找到
+      return prize.update({count, origCount})
+    }else{                                                      // 新增的資料
+      return count === 0? null: Prize.create({name, count, origCount, list_name})
+    }
+  })
+
+  return await Promise.all(allResult)
 }
 
 /**
@@ -62,7 +71,7 @@ module.exports = {
   getAllPrize,
   getPrizeByListName,
   getOnePrize,
-  createOrUpdatePrize,
   deletePrizeByList,
-  deletePrize
+  deletePrize,
+  patchAllPrize
 }

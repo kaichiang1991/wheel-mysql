@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllPrize, getPrizeByListName, createOrUpdatePrize, deletePrizeByList, deletePrize } = require('../database/prize')
+const { getAllPrize, getPrizeByListName, createOrUpdatePrize, deletePrizeByList, deletePrize, patchAllPrize } = require('../database/prize')
 const router = express.Router()
 
 // 取得所有 Prize
@@ -31,18 +31,19 @@ router.post('/', async (req, res) =>{
   res.json({code: 0, prize, data: isCreated? '新增': '更新'})
 })
 
+
 /**
- * 修改獎項資料
- * /api/prize/(抽獎名稱)
+ * 更新所有符合的獎項列表
+ * /api/prize/updateAll
  * body {
- *    name: 獎項名稱
- *    count: 剩餘數量
- *    origCount: 原始數量
+ *    list_name: 抽獎名稱
+ *    lists: 要更新的列表
  * }
  */
-router.patch('/:list_name', async (req, res) =>{
-  const {prize, isCreated} = await createOrUpdatePrize({...req.body, list_name: req.params.list_name})
-  res.json({code: 0, prize, data: isCreated? '新增': '更新'})
+router.patch('/updateAll', async (req, res) =>{
+  const {lists, list_name} = req.body
+  const allResult = (await patchAllPrize({list_name, lists})).filter(_res => _res)
+  res.json(allResult)
 })
 
 /**

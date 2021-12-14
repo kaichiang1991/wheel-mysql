@@ -11,22 +11,13 @@ import LoadButton from "./LoadButton"
 const SettingPage = () => {
   const currentList = useRecoilValue(currentListState)
   const [lists, setLists] = useRecoilState(prizeLists)
-  const [toNext, setToNext] = useState(false)
   const history = useHistory()
   
-  useEffect(()=>{
-    if(!toNext)
-      return
-    
-    history.push('/game')
-  }, [lists, toNext, history])
-
-
+  // 開始遊戲
   const handleClick = async () => {
-    const allPromise = lists.map(list => fetchData(`/api/prize/${currentList}`, 'PATCH', {...list, origCount: list.count}))
-    const result = (await Promise.all(allPromise)).map(r => r.prize)
-    setLists(result)
-    setToNext(true)
+    const arr = await fetchData('/api/prize/updateAll', 'PATCH', {list_name: currentList, lists: lists.map(list => ({...list, origCount: list.count}))})
+    setLists(arr)
+    history.push('/game')
   }
 
   return (

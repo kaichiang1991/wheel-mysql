@@ -1,8 +1,9 @@
-import {Row, Col, Divider, Button, Upload, message} from 'antd'
+import { Col, Button, Upload, message} from 'antd'
 import { UploadOutlined } from "@ant-design/icons"
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { currentListState, prizeLists } from '../recoil'
 import fetchData from '../server'
+import CustomRow from './common/Row'
 // import XLSX from 'xlsx'
 
 const LoadButton = () => {
@@ -21,6 +22,7 @@ const LoadButton = () => {
   const currentList = useRecoilValue(currentListState)
   const setLists = useSetRecoilState(prizeLists)
 
+  /** 按讀取後的行為 */
   const handleLoadClick = async () => {
     if(!currentList)
       return
@@ -29,17 +31,14 @@ const LoadButton = () => {
   }
 
   return (
-    <>
-      <Row style={{marginTop: 12}}>
-        <Col span={10} offset={2}><Button onClick={handleLoadClick}>讀取</Button></Col>
-        <Col span={12}>
-          <Upload {...props}>
-            <Button icon={<UploadOutlined />}>上傳表格</Button>
-          </Upload>
-        </Col>
-      </Row>
-      <Divider style={{margin: 12}}/>
-    </>
+    <CustomRow>
+      <Col span={10} offset={2}><Button onClick={handleLoadClick}>讀取</Button></Col>
+      <Col span={12}>
+        <Upload {...props}>
+          <Button icon={<UploadOutlined />}>上傳表格</Button>
+        </Upload>
+      </Col>
+    </CustomRow>
   )
 }
 
