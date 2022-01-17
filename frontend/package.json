@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://intelligent-wiles.108-61-160-248.plesk.page/build",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@inlet/react-pixi": "^6.6.5",
