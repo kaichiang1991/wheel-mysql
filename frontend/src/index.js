@@ -7,7 +7,7 @@ import {BrowserRouter} from 'react-router-dom'
 
 ReactDOM.render(
   <RecoilRoot>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.REACT_APP_BASENAME || '/'}>
       <App />
     </BrowserRouter>
   </RecoilRoot>,

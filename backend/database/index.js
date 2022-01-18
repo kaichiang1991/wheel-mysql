@@ -7,11 +7,7 @@ const DB_INSTANCE = process.env.DB_INSTANCE;
 const prod = process.env.NODE_ENV == 'production'
 
 const option = {
-  dialect: 'mysql',
-  host: prod? `/cloudsql/${DB_INSTANCE}`: 'localhost',
-  dialectOptions: !prod? null: {
-    socketPath: `/cloudsql/${DB_INSTANCE}`
-  }
+  dialect: 'mariadb'
 }
 
 console.log('option', JSON.stringify(option))
